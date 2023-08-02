@@ -23,10 +23,16 @@ def get_measurements(root, kword):
             losses[freq] = gain
     return losses
 
+def generate_measurement (ant):
+    tree = get_tree("Cableloss Converter\Calibration Files\AA2213_15cm_Flex_Ant" + ant + ".xml")
+    root = get_root(tree)
+    ant_loss = get_measurements(root, 'Measures')
+    return ant_loss
+
+
+
 if __name__ == "__main__":
     #Test Step
-    tree = get_tree("Cableloss Converter\Calibration Files\AA2213_15cm_Flex_Ant1.xml")
-    root = get_root(tree)
-    ant1_loss = get_measurements(root, 'Measures')
+    ant1_loss = generate_measurement ('1')
     for i in ant1_loss:
         print (i, ant1_loss[i])
