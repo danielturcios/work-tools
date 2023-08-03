@@ -29,10 +29,24 @@ def generate_measurement (ant):
     ant_loss = get_measurements(root, 'Measures')
     return ant_loss
 
+def generate_all_measurements ():
+    all_measures = {}
+    default = {}
 
+    all_measures['Ant1'] = generate_measurement ('1')
+    all_measures['Ant2'] = generate_measurement ('2')
+    all_measures['Ant3'] = generate_measurement ('3')
+    all_measures['Ant4'] = generate_measurement ('4')
+    all_measures['Ant7'] = generate_measurement ('7')
+    all_measures['Ant8'] = generate_measurement ('8')
+    all_measures['Ant9'] = generate_measurement ('9')
+
+    for freq in all_measures['Ant1']:
+        default[freq] = 1
+
+    all_measures['default'] = default
+    return all_measures
 
 if __name__ == "__main__":
     #Test Step
-    ant1_loss = generate_measurement ('1')
-    for i in ant1_loss:
-        print (i, ant1_loss[i])
+    ant_losses = generate_all_measurements () 
