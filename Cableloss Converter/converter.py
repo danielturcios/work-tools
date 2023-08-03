@@ -11,9 +11,9 @@ def get_root (tree):
     return root
 
 def get_measurements(root, kword):
-    # parses throught the root node to using the following path 'Root'->'Measurements'->'Measurement'
+    # parses throught the root node of a tree using the following path: 'Root'-> kword('Measurements') ->'Measurement'
     # At each Measurement object, store the frequency and gain into dictionary 'losses'
-    # then returns losses
+    # then returns losses, a dictionary with freq as keys and the respective gain as values 
     losses = {}
     for measurements in root.findall(kword):
         for measurement in measurements:
@@ -24,12 +24,17 @@ def get_measurements(root, kword):
     return losses
 
 def generate_measurement (ant):
+    # Generate a dictionary based off the specific antenna cableloss file. 
+    # Parameter ant is a string that completes the filename that will be converted from xml to a dict
     tree = get_tree("Cableloss Converter\Calibration Files\AA2213_15cm_Flex_Ant" + ant + ".xml")
     root = get_root(tree)
     ant_loss = get_measurements(root, 'Measures')
     return ant_loss
 
 def generate_all_measurements ():
+    # generates a dictionary with the antenna names as keys and a dictionary of the respective
+    # freq/gains for each antenna. Also adds a default antenna cableloss key that contains a dictionary value
+    # consisting of all shared frequencies and 1 gain by default
     all_measures = {}
     default = {}
 
@@ -49,4 +54,4 @@ def generate_all_measurements ():
 
 if __name__ == "__main__":
     #Test Step
-    ant_losses = generate_all_measurements () 
+    ant_losses = generate_all_measurements()
