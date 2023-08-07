@@ -1,5 +1,9 @@
 import xml.etree.ElementTree as ET
 
+header = "Frequency (MHz), Ant 1, Ant 2, Ant 3, Ant 4, Ant 1A, Ant 2A, Ant 3A, Ant 4A\n"
+file_to_create = "AA2213_config1B.sploss"
+config = "1B"
+
 def get_tree (file_name):
     # returns an ElementTree from the given filename
     tree = ET.parse(file_name)
@@ -52,6 +56,35 @@ def generate_all_measurements ():
     all_measures['default'] = default
     return all_measures
 
+def create_file (file_name, header):
+    # creates a new file or overwrite existing file with file_name and adds the header line (specified by global_parameter header)
+    f = open(file_name, 'w+')
+    f.write(header)
+    return f
+
+def create_loss_table (file, ant_config, ant_losses):
+    line = ""
+    for freq in ant_losses["default"]:
+        line = str(freq) + ','
+        for ant in ant_config:
+            line += str(ant_losses[ant][freq]) + ','
+        line = line[:-1] + '\n'
+        file.write(line)
+        line = ""
+
+def create_sploss_table (file, config, ant_losses) :
+    ant_config = []
+    if config.upper() == "1A":
+        ant_config = ["Ant7", "Ant8", "Ant9", "Ant4", "Ant1", "Ant2", "Ant3", "default"]
+    elif config.upper() == "1B":
+        ant_config = ["Ant2", "Ant3", "Ant4", "default", "Ant1", "default", "default", "default"]
+    else:
+        ant_config = ["default"] * 8
+    create_loss_table(file, ant_config, ant_losses)
+
 if __name__ == "__main__":
     #Test Step
     ant_losses = generate_all_measurements()
+    file = create_file(file_to_create, header)
+    create_sploss_table(file, config, ant_losses)
+    file.close()
